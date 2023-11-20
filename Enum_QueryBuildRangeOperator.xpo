@@ -1,0 +1,64 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: DBE
+
+; Microsoft Dynamics AX Enumtype : QueryBuildRangeOperator unloaded
+; --------------------------------------------------------------------------------
+  ENUMTYPEVERSION 1
+  
+  ENUMTYPE #QueryBuildRangeOperator
+    Id 31354
+    PROPERTIES
+      Name                #QueryBuildRangeOperator
+      UseEnumValue        #Yes
+    ENDPROPERTIES
+    
+    TYPEELEMENTS
+      #NonEqual
+      PROPERTIES
+        Name                #NonEqual
+        Label               #!=
+        EnumValue           #0
+      ENDPROPERTIES
+      
+      #Equal
+      PROPERTIES
+        Name                #Equal
+        Label               #=
+        EnumValue           #1
+      ENDPROPERTIES
+      
+      #MoreThen
+      PROPERTIES
+        Name                #MoreThen
+        Label               #>
+        EnumValue           #2
+      ENDPROPERTIES
+      
+      #MoreThenOrEqual
+      PROPERTIES
+        Name                #MoreThenOrEqual
+        Label               #>=
+        EnumValue           #3
+      ENDPROPERTIES
+      
+      #LesserThen
+      PROPERTIES
+        Name                #LesserThen
+        Label               #<
+        EnumValue           #4
+      ENDPROPERTIES
+      
+      #LesserThenOrEqual
+      PROPERTIES
+        Name                #LesserThenOrEqual
+        Label               #<=
+        EnumValue           #5
+      ENDPROPERTIES
+      
+    ENDTYPEELEMENTS
+  ENDENUMTYPE
+  
+
+***Element: END

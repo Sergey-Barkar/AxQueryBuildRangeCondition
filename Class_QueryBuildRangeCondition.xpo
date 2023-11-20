@@ -1,0 +1,305 @@
+﻿Exportfile for AOT version 1.0 or later
+Formatversion: 1
+
+***Element: CLS
+
+; Microsoft Dynamics AX Class: QueryBuildRangeCondition выгружен
+; --------------------------------------------------------------------------------
+  CLSVERSION 1
+  
+  CLASS #QueryBuildRangeCondition
+    Id 38519
+    PROPERTIES
+      Name                #QueryBuildRangeCondition
+      Extends             #
+      RunOn               #Called from
+    ENDPROPERTIES
+    
+    METHODS
+      Version: 3
+      SOURCE #link
+        #public QueryBuildRangeCondition link(QueryBuildRangeOperator _operator, QueryBuildDataSource _qbds, str _fieldName)
+        #{
+        #    ;
+        #
+        #    this.value(_operator, QueryBuildRangeCondition::createWithDS(_qbds, _fieldName));
+        #
+        #    return this;
+        #}
+      ENDSOURCE
+      SOURCE #createWithDS
+        #public static QueryBuildRangeCondition createWithDS(QueryBuildDataSource _qbds, str _fieldName)
+        #{
+        #    #DEFINE.FORMAT('\%1.\%2')
+        #    ;
+        #
+        #    return new QueryBuildRangeCondition(strFmt(#FORMAT, _qbds.name(), _fieldName));
+        #}
+      ENDSOURCE
+      SOURCE #addEscape
+        #private str addEscape(str _value)
+        #{
+        #    str quotableStr  = ' *",.()\\',
+        #        specialChars = ' *",.()<>!=',
+        #        ret;
+        #    int i = 1;
+        #    int pos;
+        #    int len = strLen(_value);
+        #    boolean escape;
+        #
+        #    escape = true;
+        #    pos = strFind(_value, quotableStr, i, len - i + 1);
+        #    while (pos)
+        #    {
+        #        if (subStr(_value, pos, 1) == '\\')
+        #        {
+        #            if (strFind(_value, specialChars, pos + 1, 1))
+        #            {
+        #               escape = false;
+        #            }
+        #        }
+        #        if (escape)
+        #        {
+        #            ret += subStr(_value, i, pos - i) + '\\' + subStr(_value, pos, 1);
+        #        }
+        #        else
+        #        {
+        #            ret += subStr(_value, i, pos - i + 1);
+        #            escape = true;
+        #        }
+        #        i = pos + 1;
+        #        if (i<=len)
+        #        {
+        #            pos = strFind(_value, quotableStr, i, len - i + 1);
+        #        }
+        #        else
+        #            pos = 0;
+        #    }
+        #
+        #    if (i == 1)
+        #        return _value;
+        #
+        #    if (i<=len)
+        #        ret += subStr(_value, i, len - i + 1);
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #addBorderToValue
+        #private str addBorderToValue(str _value)
+        #{
+        #    ;
+        #
+        #    return strFmt(#CONDITION_BORDER, _value);
+        #}
+      ENDSOURCE
+      SOURCE #appendValue
+        #private void appendValue(str _operator, str _value)
+        #{
+        #    ;
+        #
+        #    valueBuffer.appendText(_operator);
+        #    valueBuffer.appendText(_value);
+        #}
+      ENDSOURCE
+      SOURCE #setOperator
+        #private void setOperator(QueryBuildRangeOperator _operator)
+        #{
+        #    ;
+        #
+        #    valueBuffer.appendText(enum2str(_operator));
+        #}
+      ENDSOURCE
+      SOURCE #finalize
+        #public void finalize()
+        #{
+        #    ;
+        #
+        #    valueBuffer = null;
+        #}
+      ENDSOURCE
+      SOURCE #and
+        #public QueryBuildRangeCondition and(QueryBuildRangeCondition _condition)
+        #{
+        #    #DEFINE.OPERATOR_AND('&&')
+        #    ;
+        #
+        #    isValueAnotherConditionIncluded = true;
+        #
+        #    this.appendValue(#OPERATOR_AND, _condition.toString());
+        #
+        #    return this;
+        #}
+      ENDSOURCE
+      SOURCE #classDeclaration
+        #class QueryBuildRangeCondition
+        #{
+        #    str                     field;
+        #
+        #    boolean                 isValueNonDefault,
+        #                            isValueAnotherConditionIncluded;
+        #    TextBuffer              valueBuffer;
+        #
+        #    #LOCALMACRO.CONDITION_BORDER
+        #    '(\%1)'
+        #    #ENDMACRO
+        #}
+      ENDSOURCE
+      SOURCE #new
+        #protected void new(str _fieldName)
+        #{
+        #    ;
+        #
+        #    field       = _fieldName;
+        #    valueBuffer = new TextBuffer();
+        #}
+      ENDSOURCE
+      SOURCE #or
+        #public QueryBuildRangeCondition or(QueryBuildRangeCondition _condition)
+        #{
+        #    #DEFINE.OPERATOR_OR('||')
+        #    ;
+        #
+        #    isValueAnotherConditionIncluded = true;
+        #
+        #    this.appendValue(#OPERATOR_OR, _condition.toString());
+        #
+        #    return this;
+        #}
+      ENDSOURCE
+      SOURCE #getStrValue
+        #private str getStrValue(anyType _value)
+        #{
+        #    Types valueType = typeOf(_value);
+        #    str   ret;
+        #
+        #    switch (valueType)
+        #    {
+        #        case Types::Class :
+        #            if (SysDictClass::is(_value, classNum(QueryBuildRangeCondition)))
+        #            {
+        #                ret = this.getStrValueFromQBRC(_value);
+        #            }
+        #            else
+        #            {
+        #                throw Error(strFmt("@GEE3607", funcName()));
+        #            }
+        #            break;
+        #
+        #        case Types::Integer,
+        #             Types::Enum:
+        #            ret = int2str(_value);
+        #            break;
+        #
+        #        case Types::Int64 :
+        #            ret = int642str(_value);
+        #            break;
+        #
+        #        case Types::Real:
+        #            ret = num2str(_value,0,16,1,0);
+        #            break;
+        #
+        #        case Types::Date:
+        #            ret = date2StrXpp(_value);
+        #            break;
+        #
+        #        case Types::UtcDateTime:
+        #            if (_value==DateTimeUtil::minValue())
+        #            {
+        #                ret = @'1900-01-01T00:00:00';
+        #            }
+        #            else
+        #            {
+        #                ret = DateTimeUtil::toStr(_value);
+        #            }
+        #            break;
+        #
+        #        case Types::String,
+        #             Types::RString,
+        #             Types::VarString:
+        #            if (_value)
+        #            {
+        #                ret = strFmt(@'"%1"', this.addEscape(_value));
+        #            }
+        #            else
+        #            {
+        #                ret = SysQuery::valueEmptyString();
+        #            }
+        #            break;
+        #
+        #        default :
+        #            if (new DictEnum(enumNum(Types)).value2Symbol(valueType))
+        #            {
+        #                ret = strFmt('%1', _value);
+        #            }
+        #            else
+        #            {
+        #                ret = SysQuery::valueUnlimited();
+        #            }
+        #            break;
+        #    }
+        #
+        #    return ret;
+        #}
+      ENDSOURCE
+      SOURCE #getStrValueFromQBRC
+        #private str getStrValueFromQBRC(QueryBuildRangeCondition _condition)
+        #{
+        #    ;
+        #
+        #    return _condition.toString();
+        #}
+      ENDSOURCE
+      SOURCE #toString
+        #public str toString()
+        #{
+        #    str ret = valueBuffer.getText();
+        #    ;
+        #
+        #    if (!isValueNonDefault)
+        #    {
+        #        ret = this.addBorderToValue(field) + ret;
+        #    }
+        #
+        #    return this.addBorderToValue(ret);
+        #}
+      ENDSOURCE
+      SOURCE #value
+        #public QueryBuildRangeCondition value(QueryBuildRangeOperator _operator,
+        #                                      anyType                 _value)
+        #{
+        #    ;
+        #
+        #    if (!isValueNonDefault)
+        #    {
+        #        isValueNonDefault = true;
+        #
+        #        if (isValueAnotherConditionIncluded)
+        #        {
+        #            valueBuffer.setText(this.addBorderToValue(field + enum2str(_operator) + this.getStrValue(_value)) + valueBuffer.getText());
+        #        }
+        #        else
+        #        {
+        #            valueBuffer.appendText(this.addBorderToValue(field + enum2str(_operator) + this.getStrValue(_value)));
+        #        }
+        #    }
+        #    else
+        #    {
+        #        throw Error(strFmt("@GEE3607", funcName()));
+        #    }
+        #
+        #    return this;
+        #}
+      ENDSOURCE
+      SOURCE #create
+        #public static QueryBuildRangeCondition create(str _fieldName)
+        #{
+        #    ;
+        #
+        #    return new QueryBuildRangeCondition(_fieldName);
+        #}
+      ENDSOURCE
+    ENDMETHODS
+  ENDCLASS
+
+***Element: END
